@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity() {
 
     val jsonAdapter: JsonAdapter<Result> = moshi.adapter(Result::class.java)
     val result = jsonAdapter.fromJson(apiResponse)
+      val a = arrayListOf<Meal>()
+      a.addAll(result!!.meals)
+    listView.adapter = RecipeAdapter(this, a)
 
     val context = this
     listView.setOnItemClickListener {_, _, position, _ ->
