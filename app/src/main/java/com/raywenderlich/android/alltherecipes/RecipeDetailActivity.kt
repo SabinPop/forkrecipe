@@ -17,11 +17,11 @@ class RecipeDetailActivity : AppCompatActivity() {
         const val EXTRA_TITLE = "title"
         const val EXTRA_URL = "url"
 
-        fun newIntent(context: Context, recipe: Recipe): Intent {
+        fun newIntent(context: Context, meal: Meal): Intent {
             val detailIntent = Intent(context, RecipeDetailActivity::class.java)
 
-            detailIntent.putExtra(EXTRA_TITLE, recipe.title)
-            detailIntent.putExtra(EXTRA_URL, recipe.instructionUrl)
+            detailIntent.putExtra(EXTRA_TITLE, meal.strMeal)
+            detailIntent.putExtra(EXTRA_URL, meal.strSource)
 
             return detailIntent
         }

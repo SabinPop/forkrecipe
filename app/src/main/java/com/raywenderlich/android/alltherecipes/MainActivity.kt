@@ -49,11 +49,13 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
-    listView = findViewById<ListView>(R.id.recipe_list_view)
-    val recipeList = Recipe.getRecipesFromFile("recipes.json", this)
+    listView = findViewById(R.id.recipe_list_view)
 
-    val adapter = RecipeAdapter(this, recipeList)
-    listView.adapter = adapter
+
+    //val recipeList = Recipe.getRecipesFromFile("recipes.json", this)
+
+    //val adapter = RecipeAdapter(this, recipeList)
+    //listView.adapter = adapter
 
     val apiResponse = URL("https://www.themealdb.com/api/json/v1/1/latest.php").readText()
 
@@ -65,14 +67,14 @@ class MainActivity : AppCompatActivity() {
 
     val jsonAdapter: JsonAdapter<Result> = moshi.adapter(Result::class.java)
     val result = jsonAdapter.fromJson(apiResponse)
-      val a = arrayListOf<Meal>()
-      a.addAll(result!!.meals)
-    listView.adapter = RecipeAdapter(this, a)
+      val meals = arrayListOf<Meal>()
+      meals.addAll(result!!.meals)
+    listView.adapter = RecipeAdapter(this, meals)
 
     val context = this
     listView.setOnItemClickListener {_, _, position, _ ->
-      val selectedRecipe = recipeList[position]
-      val detailIntent = RecipeDetailActivity.newIntent(context, selectedRecipe)
+      val selectedMeal = meals[position]
+      val detailIntent = RecipeDetailActivity.newIntent(context, selectedMeal)
 
       startActivity(detailIntent)
     }

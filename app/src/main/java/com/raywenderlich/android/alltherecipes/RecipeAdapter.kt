@@ -17,16 +17,16 @@ import com.raywenderlich.android.alltherecipes.R.id.*
 import com.raywenderlich.android.alltherecipes.R.layout.*
 import com.squareup.picasso.Picasso
 
-class RecipeAdapter(private val context: Context, private val dataSource: ArrayList<Recipe>) : BaseAdapter() {
-    private val inflater: LayoutInflater
+class RecipeAdapter(private val context: Context, private val meals: ArrayList<Meal>) : BaseAdapter() {
+    private var inflater: LayoutInflater
         = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     override fun getCount(): Int {
-        return dataSource.size
+        return meals.size
     }
 
     override fun getItem(position: Int): Any {
-        return dataSource[position]
+        return meals[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -53,16 +53,15 @@ class RecipeAdapter(private val context: Context, private val dataSource: ArrayL
                 recipe_list_thumbnail
         ) as ImageView
 
-        val recipe = getItem(position) as Recipe
+        val meal = getItem(position) as Meal
 
-        titleTextView.text = recipe.title
-        subtitleTextView.text = recipe.description
-        detailTextView.text = recipe.label
+        titleTextView.text = meal.strMeal
+        subtitleTextView.text = meal.idMeal
+        detailTextView.text = meal.strInstructions
 
-        Picasso.with(context).load(recipe.imageUrl)
+        Picasso.with(context).load(meal.strMealThumb)
                 .placeholder(android.R.mipmap.sym_def_app_icon).into(thumbnailImageView)
 
         return rowView
     }
 }
-
