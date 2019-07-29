@@ -33,11 +33,45 @@ package com.raywenderlich.android.alltherecipes
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import retrofit2.Response
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+
+  private lateinit var listView: ListView
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+    listView = findViewById<ListView>(R.id.recipe_list_view)
+    val recipeList = Recipe.getRecipesFromFile("recipes.json", this)
+
+    val adapter = RecipeAdapter(this, recipeList)
+    listView.adapter = adapter
+
+    val apiResponse = URL("https://www.themealdb.com/api/json/v1/1/latest.php").readText()
+
+    val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+    //val listType = Types.newParameterizedType(List::class.java, Meal::class.java)
+
+    val jsonAdapter: JsonAdapter<Result> = moshi.adapter(Result::class.java)
+    val result = jsonAdapter.fromJson(apiResponse)
+
+    val context = this
+    listView.setOnItemClickListener {_, _, position, _ ->
+      val selectedRecipe = recipeList[position]
+      val detailIntent = RecipeDetailActivity.newIntent(context, selectedRecipe)
+
+      startActivity(detailIntent)
+    }
   }
 }
