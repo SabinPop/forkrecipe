@@ -65,6 +65,8 @@ class MainActivity : AppCompatActivity() {
 
     //val listType = Types.newParameterizedType(List::class.java, Meal::class.java)
 
+    //move networking in separate thread !!!
+
     val jsonAdapter: JsonAdapter<Result> = moshi.adapter(Result::class.java)
     val result = jsonAdapter.fromJson(apiResponse)
       val meals = arrayListOf<Meal>()
