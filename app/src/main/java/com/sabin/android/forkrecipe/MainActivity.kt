@@ -34,6 +34,9 @@ package com.sabin.android.forkrecipe
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ListView
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -62,6 +65,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        val mapper = jacksonObjectMapper()
+
+        var r : Result = mapper.readValue<Result>(get())
+        print(r)
 
 
         val moshi = Moshi.Builder()
