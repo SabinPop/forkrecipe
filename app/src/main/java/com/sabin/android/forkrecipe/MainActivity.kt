@@ -34,12 +34,8 @@ package com.sabin.android.forkrecipe
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ListView
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.*
 import java.net.URL
 import java.util.concurrent.LinkedBlockingQueue
@@ -67,29 +63,15 @@ class MainActivity : AppCompatActivity() {
 
         val mapper = jacksonObjectMapper()
 
-        var r : Result = mapper.readValue<Result>(get())
-        print(r)
-
-
-        val moshi = Moshi.Builder()
-                .add(KotlinJsonAdapterFactory())
-                .build()
-
+        val result = mapper.readValue<Result>(get())
         //val listType = Types.newParameterizedType(List::class.java, Result::class.java)
 
-
-
-        val jsonAdapter: JsonAdapter<Result> = moshi.adapter(Result::class.java)
-        val result = jsonAdapter.fromJson(get())
-        val meals = arrayListOf<Meal>()
-
-        meals.addAll(result!!.meals)
 
         listView.adapter = ResultAdapter(this, result)
 
         val context = this
         listView.setOnItemClickListener {_, _, position, _ ->
-            val selectedMeal = meals[position]
+            val selectedMeal = result.meals[position]
             val detailIntent = RecipeDetailActivity.newIntent(context, selectedMeal)
 
             startActivity(detailIntent)
@@ -107,8 +89,7 @@ class MainActivity : AppCompatActivity() {
             mainURL  + (if (argumentID != 0) action + argument else action)
 
     private fun getResponse(action : String): String {
-        val text = URL(action).readText()
-        return text
+        return URL(action).readText()
     }
     private val pool = ThreadPoolExecutor(1, 1, 3L, TimeUnit.SECONDS, LinkedBlockingQueue())
 
@@ -120,6 +101,4 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-
 }
