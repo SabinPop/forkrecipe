@@ -29,7 +29,7 @@
  *
  */
 
-package com.raywenderlich.android.alltherecipes
+package com.sabin.android.forkrecipe
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -46,73 +46,73 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
-  val mainURL : String = "https://www.themealdb.com/api/json/v1/1/"
-  private lateinit var listView: ListView
+    val mainURL : String = "https://www.themealdb.com/api/json/v1/1/"
+    private lateinit var listView: ListView
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    listView = findViewById(R.id.recipe_list_view)
-
-
-    //val recipeList = Recipe.getRecipesFromFile("recipes.json", this)
-
-    //val adapter = ResultAdapter(this, recipeList)
-    //listView.adapter = adapter
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        listView = findViewById(R.id.recipe_list_view)
 
 
+        //val recipeList = Recipe.getRecipesFromFile("recipes.json", this)
+
+        //val adapter = ResultAdapter(this, recipeList)
+        //listView.adapter = adapter
 
 
 
-    val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-
-    //val listType = Types.newParameterizedType(List::class.java, Result::class.java)
 
 
+        val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
 
-    val jsonAdapter: JsonAdapter<Result> = moshi.adapter(Result::class.java)
-    val result = jsonAdapter.fromJson(get())
-    val meals = arrayListOf<Meal>()
+        //val listType = Types.newParameterizedType(List::class.java, Result::class.java)
 
-    meals.addAll(result!!.meals)
 
-    listView.adapter = ResultAdapter(this, result)
 
-    val context = this
-    listView.setOnItemClickListener {_, _, position, _ ->
-      val selectedMeal = meals[position]
-      val detailIntent = RecipeDetailActivity.newIntent(context, selectedMeal)
+        val jsonAdapter: JsonAdapter<Result> = moshi.adapter(Result::class.java)
+        val result = jsonAdapter.fromJson(get())
+        val meals = arrayListOf<Meal>()
 
-      startActivity(detailIntent)
+        meals.addAll(result!!.meals)
+
+        listView.adapter = ResultAdapter(this, result)
+
+        val context = this
+        listView.setOnItemClickListener {_, _, position, _ ->
+            val selectedMeal = meals[position]
+            val detailIntent = RecipeDetailActivity.newIntent(context, selectedMeal)
+
+            startActivity(detailIntent)
+        }
     }
-  }
-  fun get() : String {
-    var result = ""
-    GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT) {
-      result = fetchResponse(pool)
-    }
-    return result
-  }
-
-  private fun action(mainURL: String, action: String, argumentID: Int, argument: String) : String =
-          mainURL  + (if (argumentID != 0) action + argument else action)
-
-  private fun getResponse(action : String): String {
-    val text = URL(action).readText()
-    return text
-  }
-  private val pool = ThreadPoolExecutor(1, 1, 3L, TimeUnit.SECONDS, LinkedBlockingQueue())
-
-  private suspend fun fetchResponse(threadPoolExecutor: ThreadPoolExecutor): String = coroutineScope {
-    withContext(threadPoolExecutor.asCoroutineDispatcher())
-    {
-      val result = async { getResponse(action(mainURL, "latest.php", 0, "")) }
-      result.await()
+    fun get() : String {
+        var result = ""
+        GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT) {
+            result = fetchResponse(pool)
+        }
+        return result
     }
 
-  }
+    private fun action(mainURL: String, action: String, argumentID: Int, argument: String) : String =
+            mainURL  + (if (argumentID != 0) action + argument else action)
+
+    private fun getResponse(action : String): String {
+        val text = URL(action).readText()
+        return text
+    }
+    private val pool = ThreadPoolExecutor(1, 1, 3L, TimeUnit.SECONDS, LinkedBlockingQueue())
+
+    private suspend fun fetchResponse(threadPoolExecutor: ThreadPoolExecutor): String = coroutineScope {
+        withContext(threadPoolExecutor.asCoroutineDispatcher())
+        {
+            val result = async { getResponse(action(mainURL, "latest.php", 0, "")) }
+            result.await()
+        }
+
+    }
 
 
 }
