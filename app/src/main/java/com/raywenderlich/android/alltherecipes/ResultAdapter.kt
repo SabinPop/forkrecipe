@@ -17,16 +17,16 @@ import com.raywenderlich.android.alltherecipes.R.id.*
 import com.raywenderlich.android.alltherecipes.R.layout.*
 import com.squareup.picasso.Picasso
 
-class RecipeAdapter(private val context: Context, private val meals: ArrayList<Meal>) : BaseAdapter() {
+class ResultAdapter(private val context: Context, private val result: Result) : BaseAdapter() {
     private var inflater: LayoutInflater
         = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
     override fun getCount(): Int {
-        return meals.size
+        return result.meals.size
     }
 
     override fun getItem(position: Int): Any {
-        return meals[position]
+        return result.meals[position]
     }
 
     override fun getItemId(position: Int): Long {

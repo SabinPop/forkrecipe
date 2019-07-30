@@ -6,7 +6,7 @@ import org.json.JSONArray
 import org.json.JSONException
 
 @JsonClass(generateAdapter = true)
-class Meal(
+data class Meal(
     val dateModified: Any,
     val idMeal: String,
     val strArea: String,
@@ -58,4 +58,6 @@ class Meal(
     val strSource: String,
     val strTags: String,
     val strYoutube: String
-)
+){
+    companion object
+}
