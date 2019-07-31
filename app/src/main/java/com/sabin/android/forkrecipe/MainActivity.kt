@@ -34,6 +34,8 @@ package com.sabin.android.forkrecipe
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ListView
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import kotlinx.coroutines.*
@@ -60,10 +62,9 @@ class MainActivity : AppCompatActivity() {
         //listView.adapter = adapter
 
 
+        val mapper = ObjectMapper().registerModule(KotlinModule())
 
-        val mapper = jacksonObjectMapper()
-
-        val result = mapper.readValue<Result>(get())
+        val result : Result = mapper.readValue(get())
         //val listType = Types.newParameterizedType(List::class.java, Result::class.java)
 
 

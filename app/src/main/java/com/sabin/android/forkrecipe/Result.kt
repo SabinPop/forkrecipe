@@ -1,10 +1,11 @@
 package com.sabin.android.forkrecipe
 
-import com.squareup.moshi.JsonClass
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonUnwrapped
 
-@JsonClass(generateAdapter = true)
-data class Result(
-    val meals: List<Meal>
-){
-    companion object
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+class Result {
+    @JsonUnwrapped
+    lateinit var meals: List<Meal>
 }
