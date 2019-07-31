@@ -31,18 +31,17 @@
 
 package com.sabin.android.forkrecipe
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.ListView
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.URL
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,45 +60,35 @@ class MainActivity : AppCompatActivity() {
         //val adapter = ResultAdapter(this, recipeList)
         //listView.adapter = adapter
 
+        val latest = action(mainURL, "latest.php", 0, "")
+        val filterByCategory = action(mainURL, "filter.php", 1, "c=")
+        val filterByIngredient= action(mainURL, "filter.php", 1, "i=")
+        GlobalScope.launch(Dispatchers.Main) {
+            val jsonString = withContext(Dispatchers.Default) {
+                getUrlText(latest)
+            }
+            val result = processResponse(jsonString)
+            setupViews(result)
+        }
+    }
 
-        val mapper = ObjectMapper().registerModule(KotlinModule())
-
-        val result : Result = mapper.readValue(get())
-        //val listType = Types.newParameterizedType(List::class.java, Result::class.java)
-
-
+    private fun setupViews(result: Result) {
         listView.adapter = ResultAdapter(this, result)
 
-        val context = this
         listView.setOnItemClickListener {_, _, position, _ ->
             val selectedMeal = result.meals[position]
-            val detailIntent = RecipeDetailActivity.newIntent(context, selectedMeal)
-
+            val detailIntent = RecipeDetailActivity.newIntent(this@MainActivity, selectedMeal)
             startActivity(detailIntent)
         }
     }
-    fun get() : String {
-        var result = ""
-        GlobalScope.launch(Dispatchers.Main, CoroutineStart.DEFAULT) {
-            result = fetchResponse(pool)
-        }
-        return result
+
+    private fun getUrlText(url: String) : String {
+        return URL(url).readText()
     }
+    private fun processResponse(jsonString: String) : Result =
+            ObjectMapper().registerModule(KotlinModule()).readValue(jsonString)
 
     private fun action(mainURL: String, action: String, argumentID: Int, argument: String) : String =
-            mainURL  + (if (argumentID != 0) action + argument else action)
+            mainURL  + (if (argumentID != 0) "$action?$argument" else action)
 
-    private fun getResponse(action : String): String {
-        return URL(action).readText()
-    }
-    private val pool = ThreadPoolExecutor(1, 1, 3L, TimeUnit.SECONDS, LinkedBlockingQueue())
-
-    private suspend fun fetchResponse(threadPoolExecutor: ThreadPoolExecutor): String = coroutineScope {
-        withContext(threadPoolExecutor.asCoroutineDispatcher())
-        {
-            val result = async { getResponse(action(mainURL, "latest.php", 0, "")) }
-            result.await()
-        }
-
-    }
 }

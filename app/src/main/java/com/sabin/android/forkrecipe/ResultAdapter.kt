@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.sabin.android.forkrecipe.R.id.*
-import com.sabin.android.forkrecipe.R.layout.*
+import com.sabin.android.forkrecipe.R.layout.list_item_recipe
 import com.squareup.picasso.Picasso
 
 class ResultAdapter(private val context: Context, private val result: Result) : BaseAdapter() {
@@ -28,34 +28,42 @@ class ResultAdapter(private val context: Context, private val result: Result) : 
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView = inflater.inflate(
-                list_item_recipe, parent, false)
+        val view: View
+        val holder: ViewHolder
 
-        val titleTextView = rowView.findViewById(
-                recipe_list_title
-        ) as TextView
+        if (convertView == null) {
 
-        val subtitleTextView = rowView.findViewById(
-                recipe_list_subtitle
-        ) as TextView
+            view = inflater.inflate(list_item_recipe, parent, false)
 
-        val detailTextView = rowView.findViewById(
-                recipe_list_detail
-        ) as TextView
+            holder = ViewHolder()
+            holder.thumbnailImageView = view.findViewById(recipe_list_thumbnail) as ImageView
+            holder.titleTextView = view.findViewById(recipe_list_title) as TextView
+            holder.subtitleTextView = view.findViewById(recipe_list_subtitle) as TextView
 
-        val thumbnailImageView = rowView.findViewById(
-                recipe_list_thumbnail
-        ) as ImageView
+            view.tag = holder
+        } else {
+            view = convertView
+            holder = convertView.tag as ViewHolder
+        }
+
+        val titleTextView = holder.titleTextView
+        val subtitleTextView = holder.subtitleTextView
+        val thumbnailImageView = holder.thumbnailImageView
+
 
         val meal = getItem(position) as Meal
 
         titleTextView.text = meal.strMeal
-        subtitleTextView.text = meal.idMeal
-        detailTextView.text = meal.strInstructions
+        subtitleTextView.text = meal.strInstructions
 
         Picasso.with(context).load(meal.strMealThumb)
                 .placeholder(android.R.mipmap.sym_def_app_icon).into(thumbnailImageView)
 
-        return rowView
+        return view
+    }
+    private class ViewHolder {
+        lateinit var titleTextView: TextView
+        lateinit var subtitleTextView: TextView
+        lateinit var thumbnailImageView: ImageView
     }
 }
