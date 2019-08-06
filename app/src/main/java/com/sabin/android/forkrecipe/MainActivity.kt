@@ -38,7 +38,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import com.sabin.android.forkrecipe.R.layout.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -79,36 +78,28 @@ class MainActivity : AppCompatActivity() {
         item -> when (item.itemId){
             R.id.navigation_new -> {
                 toolbar.title = getString(R.string.toolbar_title_new)
-                //val newFragment = NewFragment.newInstance()
+                fragment1.activate()
                 fm.beginTransaction().hide(active).show(fragment1).commit()
                 active = fragment1
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
                 toolbar.title = getString(R.string.toolbar_title_search)
-                //val searchFragment = SearchFragment.newInstance()
-                fm.beginTransaction().hide(active).show(fragment2).commit()
-                active = fragment2
+                fragment2.activate()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_favorites -> {
                 toolbar.title = getString(R.string.toolbar_title_favorites)
-                //val favoritesFragment = FavoritesFragment.newInstance()
-                fm.beginTransaction().hide(active).show(fragment3).commit()
-                active = fragment3
+                fragment3.activate()
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
     }
-
-    private  fun openFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+    private fun Fragment.activate() {
+        fm.beginTransaction().hide(active).show(this).commit()
+        active = this
     }
-
 
 
 }
