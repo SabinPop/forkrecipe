@@ -32,63 +32,81 @@
 package com.sabin.android.forkrecipe
 
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
-import android.widget.ListView
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.kotlin.readValue
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.net.URL
+import com.sabin.android.forkrecipe.R.layout.activity_main
+import com.sabin.android.forkrecipe.R.layout.fragment_new
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    val mainURL : String = "https://www.themealdb.com/api/json/v1/1/"
-    private lateinit var listView: ListView
+    lateinit var toolbar: ActionBar
+    lateinit var bottomNavigation: BottomNavigationView
+
+    val fragment1 = NewFragment.newInstance()
+    val fragment2 = SearchFragment.newInstance()
+    val fragment3 = FavoritesFragment.newInstance()
+    val fm: FragmentManager = supportFragmentManager
+    var active : Fragment = fragment1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        listView = findViewById(R.id.recipe_list_view)
 
+
+        toolbar = supportActionBar!!
+        setContentView(activity_main)
+
+        bottomNavigation = findViewById(R.id.navigationView)
+        bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        if (savedInstanceState == null) {
+            fm.beginTransaction().replace(R.id.container, active, active.javaClass.simpleName).commit()
+        }
 
         //val recipeList = Recipe.getRecipesFromFile("recipes.json", this)
 
         //val adapter = ResultAdapter(this, recipeList)
         //listView.adapter = adapter
 
-        val latest = action(mainURL, "latest.php", 0, "")
-        val filterByCategory = action(mainURL, "filter.php", 1, "c=")
-        val filterByIngredient= action(mainURL, "filter.php", 1, "i=")
-        GlobalScope.launch(Dispatchers.Main) {
-            val jsonString = withContext(Dispatchers.Default) {
-                getUrlText(latest)
+
+    }
+
+    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
+        item -> when (item.itemId){
+            R.id.navigation_new -> {
+                toolbar.title = getString(R.string.toolbar_title_new)
+                //val newFragment = NewFragment.newInstance()
+                openFragment(fragment1)
+                return@OnNavigationItemSelectedListener true
             }
-            val result = processResponse(jsonString)
-            setupViews(result)
+            R.id.navigation_search -> {
+                toolbar.title = getString(R.string.toolbar_title_search)
+                //val searchFragment = SearchFragment.newInstance()
+                openFragment(fragment2)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_favorites -> {
+                toolbar.title = getString(R.string.toolbar_title_favorites)
+                //val favoritesFragment = FavoritesFragment.newInstance()
+                openFragment(fragment3)
+                active = fragment3
+                return@OnNavigationItemSelectedListener true
+            }
         }
+        false
     }
 
-    private fun setupViews(result: Result) {
-        listView.adapter = ResultAdapter(this, result)
-
-        listView.setOnItemClickListener {_, _, position, _ ->
-            val selectedMeal = result.meals[position]
-            val detailIntent = RecipeDetailActivity.newIntent(this@MainActivity, selectedMeal)
-            startActivity(detailIntent)
-        }
+    private  fun openFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 
-    private fun getUrlText(url: String) : String {
-        return URL(url).readText()
-    }
-    private fun processResponse(jsonString: String) : Result =
-            ObjectMapper().registerModule(KotlinModule()).readValue(jsonString)
 
-    private fun action(mainURL: String, action: String, argumentID: Int, argument: String) : String =
-            mainURL  + (if (argumentID != 0) "$action?$argument" else action)
 
 }
