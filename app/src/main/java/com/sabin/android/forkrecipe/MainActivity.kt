@@ -37,8 +37,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
-import com.sabin.android.forkrecipe.R.layout.activity_main
-import com.sabin.android.forkrecipe.R.layout.fragment_new
+import com.sabin.android.forkrecipe.R.layout.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -63,9 +62,10 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.navigationView)
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        if (savedInstanceState == null) {
-            fm.beginTransaction().replace(R.id.container, active, active.javaClass.simpleName).commit()
-        }
+        fm.beginTransaction().add(R.id.container, fragment3, "3").hide(fragment3).commit()
+        fm.beginTransaction().add(R.id.container, fragment2, "2").hide(fragment2).commit()
+        fm.beginTransaction().add(R.id.container,fragment1, "1").commit()
+
 
         //val recipeList = Recipe.getRecipesFromFile("recipes.json", this)
 
@@ -80,19 +80,21 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_new -> {
                 toolbar.title = getString(R.string.toolbar_title_new)
                 //val newFragment = NewFragment.newInstance()
-                openFragment(fragment1)
+                fm.beginTransaction().hide(active).show(fragment1).commit()
+                active = fragment1
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_search -> {
                 toolbar.title = getString(R.string.toolbar_title_search)
                 //val searchFragment = SearchFragment.newInstance()
-                openFragment(fragment2)
+                fm.beginTransaction().hide(active).show(fragment2).commit()
+                active = fragment2
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_favorites -> {
                 toolbar.title = getString(R.string.toolbar_title_favorites)
                 //val favoritesFragment = FavoritesFragment.newInstance()
-                openFragment(fragment3)
+                fm.beginTransaction().hide(active).show(fragment3).commit()
                 active = fragment3
                 return@OnNavigationItemSelectedListener true
             }
