@@ -26,7 +26,7 @@
                 android:contentDescription="@string/thumbnail"
                 android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
-                tools:src="@mipmap/ic_launcher"
+                tools:src="@drawable/ic_fork_red"
                 />
 
             <RelativeLayout
