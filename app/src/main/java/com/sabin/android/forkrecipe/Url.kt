@@ -15,6 +15,8 @@ class Url (action: String, argumentID: Int, argument: String) {
         }
         fun processResponse(jsonString: String) : Result =
                 ObjectMapper().registerModule(KotlinModule()).readValue(jsonString)
+        fun processCategories(jsonString: String) : Categories =
+                ObjectMapper().registerModule(KotlinModule()).readValue(jsonString)
 
         fun action(action: String, argumentID: Int, argument: String) : String =
                mainURL  + (if (argumentID != 0) "$action?$argument" else action)
