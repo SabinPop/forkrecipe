@@ -31,6 +31,7 @@
 
 package com.sabin.android.forkrecipe
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -38,6 +39,14 @@ import android.support.v4.app.FragmentManager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import com.sabin.android.forkrecipe.R.layout.*
+import android.view.ViewGroup
+import android.view.MotionEvent
+import android.view.View
+import android.view.View.OnTouchListener
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         toolbar = supportActionBar!!
         setContentView(activity_main)
 
+
         bottomNavigation = findViewById(R.id.navigationView)
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
@@ -73,6 +83,8 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
         item -> when (item.itemId){

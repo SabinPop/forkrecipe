@@ -18,4 +18,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_navigation">Navigation</string>
 
+    <string name="searchToolTipText">Search recipes</string>
+
 </resources>
