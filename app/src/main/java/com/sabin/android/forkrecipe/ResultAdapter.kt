@@ -57,7 +57,7 @@ class ResultAdapter(private val context: Context, private val result: Result) : 
         subtitleTextView.text = meal.strInstructions
 
         Picasso.with(context).load(meal.strMealThumb)
-                .placeholder(android.R.mipmap.sym_def_app_icon).into(thumbnailImageView)
+                .placeholder(R.mipmap.ic_launcher).into(thumbnailImageView)
 
         return view
     }
