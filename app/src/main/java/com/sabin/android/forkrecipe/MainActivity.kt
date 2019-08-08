@@ -38,6 +38,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import com.sabin.android.forkrecipe.R.layout.*
 import android.view.ViewGroup
 import android.view.MotionEvent
@@ -45,8 +46,7 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -66,7 +66,6 @@ class MainActivity : AppCompatActivity() {
 
         toolbar = supportActionBar!!
         setContentView(activity_main)
-
 
         bottomNavigation = findViewById(R.id.navigationView)
         bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
@@ -91,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_new -> {
                 toolbar.title = getString(R.string.toolbar_title_new)
                 fragment1.activate()
-                fm.beginTransaction().hide(active).show(fragment1).commit()
+                //fm.beginTransaction().hide(active).show(fragment1).commit()
                 active = fragment1
                 return@OnNavigationItemSelectedListener true
             }
@@ -111,7 +110,12 @@ class MainActivity : AppCompatActivity() {
     private fun Fragment.activate() {
         fm.beginTransaction().hide(active).show(this).commit()
         active = this
+        if (active == fragment2) {
+            toolbar.hide()
+        }
+        else {
+            toolbar.show()
+        }
     }
-
 
 }

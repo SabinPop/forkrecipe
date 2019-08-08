@@ -17,7 +17,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relative_layout_1">
+            android:id="@+id/relative_layout_1"
+            android:descendantFocusability="blocksDescendants">
 
             <ImageView
                 android:id="@+id/recipe_list_thumbnail"

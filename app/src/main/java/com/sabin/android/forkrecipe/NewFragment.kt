@@ -1,5 +1,6 @@
 package com.sabin.android.forkrecipe
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -42,7 +43,9 @@ class NewFragment : Fragment() {
 
         listView.setOnItemClickListener {_, _, position, _ ->
             val selectedMeal = result.meals[position]
+
             val detailIntent = RecipeDetailActivity.newIntent(this.context, selectedMeal)
+
             startActivity(detailIntent)
         }
     }
