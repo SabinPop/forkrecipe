@@ -30,9 +30,9 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         searchView = view.findViewById(R.id.search_view)
 
+        searchView.setOnFocusChangeListener{view, b -> closeKeyboard(view)}
 
-        //Not working
-        setupUI(searchView)
+
         listView1 = view.findViewById(R.id.category_list_view)
         val categories = action("categories.php", 0, "")
 
@@ -45,35 +45,15 @@ class SearchFragment : Fragment() {
         }
     }
 
-    fun setupUI(view: View) {
-
-        if (view !is EditText) {
-            view.setOnTouchListener { _, _ ->
-                closeKeyboard(view, context)
-                false
-            }
-        }
-
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                val innerView = view.getChildAt(i)
-                setupUI(innerView)
-            }
-        }
-    }
-
-    private fun closeKeyboard(view: View, context: Context) {
-        view.let { v ->
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.hideSoftInputFromWindow(v.windowToken, 0)
-        }
-    }
+    private fun closeKeyboard(view: View?) {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        if (view != null) {
+            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+        }    }
 
     private fun setupViews(result: Categories) {
         listView1.adapter = CategoryAdapter(this.context, result)
     }
-
-
 
     companion object {
         fun newInstance() : SearchFragment = SearchFragment()

@@ -48,7 +48,6 @@ class NewFragment : Fragment() {
     }
 
 
-
     companion object {
         fun newInstance(): NewFragment = NewFragment()
     }

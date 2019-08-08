@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="bottom"
+        card_view:cardElevation="8dp"
+        card_view:cardCornerRadius="10dp"
+        android:layout_margin="8dp"
+        android:id="@+id/card_view_category">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relative_layout_2">
+
+            <ImageView
+                android:id="@+id/category_list_thumbnail"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/thumbnail"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                tools:src="@drawable/ic_fork_red"
+                />
+
+            <RelativeLayout
+                android:id="@+id/category_list_text_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/cardview_light_background"
+                >
+
+                <TextView
+                    android:id="@+id/category_list_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:textSize="24sp"
+                    tools:text="Title"
+                    tools:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_alignParentStart="true"
+                    />
+
+                <TextView
+                    android:id="@+id/category_list_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/category_list_title"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textSize="18sp"
+                    tools:text="Subtitle"
+                    android:textColor="@color/gray"
+                    android:layout_alignParentStart="true"
+                    />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

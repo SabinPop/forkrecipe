@@ -8,7 +8,7 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.sabin.android.forkrecipe.R.id.*
-import com.sabin.android.forkrecipe.R.layout.list_item_recipe
+import com.sabin.android.forkrecipe.R.layout.list_item_category
 import com.squareup.picasso.Picasso
 
 class CategoryAdapter(private val context: Context, private val result: Categories) : BaseAdapter() {
@@ -33,12 +33,12 @@ class CategoryAdapter(private val context: Context, private val result: Categori
 
         if (convertView == null) {
 
-            view = inflater.inflate(list_item_recipe, parent, false)
+            view = inflater.inflate(list_item_category, parent, false)
 
             holder = ViewHolder()
-            holder.thumbnailImageView = view.findViewById(recipe_list_thumbnail) as ImageView
-            holder.titleTextView = view.findViewById(recipe_list_title) as TextView
-            holder.subtitleTextView = view.findViewById(recipe_list_subtitle) as TextView
+            holder.thumbnailImageView = view.findViewById(category_list_thumbnail) as ImageView
+            holder.titleTextView = view.findViewById(category_list_title) as TextView
+            holder.subtitleTextView = view.findViewById(category_list_subtitle) as TextView
             view.tag = holder
         } else {
             view = convertView
